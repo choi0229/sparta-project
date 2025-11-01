@@ -1,5 +1,6 @@
 package com.example.demo.domain.refund.entity;
 
+import com.example.demo.domain.Status;
 import com.example.demo.domain.order.entity.Order;
 import com.example.demo.domain.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -44,7 +45,7 @@ public class Refund {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    RefundStatus status;
+    Status status;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
@@ -55,7 +56,7 @@ public class Refund {
     LocalDateTime updatedAt;
 
     @Builder
-    public Refund(User user, Order order, String reason, RefundStatus status) {
+    public Refund(User user, Order order, String reason, Status status) {
         this.user = user;
         this.order = order;
         this.reason = reason;

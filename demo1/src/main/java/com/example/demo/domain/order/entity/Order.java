@@ -1,5 +1,6 @@
 package com.example.demo.domain.order.entity;
 
+import com.example.demo.domain.Status;
 import com.example.demo.domain.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -39,7 +40,10 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    OrderStatus status;
+    Status status;
+
+    @Column(nullable = false)
+    String shippingAddress;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
@@ -50,9 +54,10 @@ public class Order {
     LocalDateTime updatedAt;
 
     @Builder
-    public Order(User user, BigDecimal totalPrice, OrderStatus status){
+    public Order(User user, BigDecimal totalPrice, Status status, String shippingAddress){
         this.user = user;
         this.totalPrice = totalPrice;
         this.status = status;
+        this.shippingAddress = shippingAddress;
     }
 }
