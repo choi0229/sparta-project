@@ -49,7 +49,7 @@ public class CategoryService {
     // 아이디로 카테고리 조회
     public CategoryResponseDto getCategorybyId(Long id){
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Category " + id + " not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Category " + id + "가 없습니다"));
         return CategoryResponseDto.from(category);
     }
 
@@ -57,7 +57,7 @@ public class CategoryService {
     @Transactional
     public CategoryResponseDto updateCategory(Long id, UpdateCategoryRequestDto requestDto){
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Category " + id + " not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Category " + id + "가 없습니다"));
 
         if(requestDto.getName() != null){
             category.updateName(requestDto.getName());
@@ -66,7 +66,7 @@ public class CategoryService {
         if(requestDto.getDescription() != null){
             category.updateDescription(requestDto.getDescription());
         }
-        Category updatedCategory = categoryRepository.save(category);
-        return CategoryResponseDto.from(updatedCategory);
+        // Category updatedCategory = categoryRepository.save(category);
+        return CategoryResponseDto.from(category);
     }
 }

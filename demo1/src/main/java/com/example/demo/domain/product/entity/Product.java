@@ -66,4 +66,12 @@ public class Product {
         this.stock = stock;
         this.category = category;
     }
+
+    public void updateProduct(String name, String description, BigDecimal price, Integer stock, Category category){
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+        this.category = category;
+    }
 }
