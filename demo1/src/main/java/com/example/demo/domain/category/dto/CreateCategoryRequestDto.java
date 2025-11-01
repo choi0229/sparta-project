@@ -1,5 +1,6 @@
 package com.example.demo.domain.category.dto;
 
+import com.example.demo.domain.category.entity.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,6 @@ public class CreateCategoryRequestDto {
 
     private String description;
 
-    private String parentId;
+    private Long parentId;
 
 }

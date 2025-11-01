@@ -11,7 +11,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedBy;
 
 import java.time.LocalDateTime;
 
@@ -36,6 +35,9 @@ public class Category {
     @JoinColumn(name = "parent_id")
     private Category parent;
 
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String description;
+
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     LocalDateTime createdAt;
@@ -45,8 +47,9 @@ public class Category {
     LocalDateTime updatedAt;
 
     @Builder
-    public Category(String name, Category parent) {
+    public Category(String name, String description,Category parent) {
         this.name = name;
+        this.description = description;
         this.parent = parent;
     }
 }
