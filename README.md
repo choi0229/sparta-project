@@ -31,6 +31,7 @@ git status
 git add .
 git commit -m "feat: 첫 번째 과제 구현"
 git push origin work/010-1234-5678-paul
+```
 
 ### 2. PR(Pull Request) 생성
 1.	GitHub 저장소 페이지로 이동
