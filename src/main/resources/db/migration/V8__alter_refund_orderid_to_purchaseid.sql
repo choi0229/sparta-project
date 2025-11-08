@@ -1,0 +1,1 @@
+ALTER TABLE refund CHANGE COLUMN order_id purchase_id BIGINT NOT NULL;
