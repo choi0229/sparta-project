@@ -1,6 +1,5 @@
 package com.sparta.project.entity;
 
-import com.sparta.project.PurchaseStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,46 +12,40 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-@Table
+@Table(name = "purchase_product")
 @Entity
 @Getter
 @DynamicInsert
 @DynamicUpdate
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Purchase {
+public class PurchaseProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "purchase_id")
+    private Purchase purchase;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     @Column(nullable = false)
-    private BigDecimal totalPrice;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PurchaseStatus status;
+    private Integer quantity;
 
     @Column(nullable = false)
-    private String shippingAddress;
-
-    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<PurchaseProduct> purchaseProducts = new ArrayList<>();
+    private BigDecimal price;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
     @Column(nullable = false)
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
+    LocalDateTime updatedAt;
 
 }

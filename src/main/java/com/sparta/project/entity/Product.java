@@ -13,6 +13,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table
 @Entity
@@ -31,7 +33,7 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(columnDefinition = "TEXT")
@@ -42,6 +44,9 @@ public class Product {
 
     @Column(nullable = false)
     private Integer stock;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    List<PurchaseProduct> purchaseProducts = new ArrayList<>();
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
@@ -59,6 +64,18 @@ public class Product {
             BigDecimal price,
             Integer stock
     ) {
+        this.category = category;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+    }
+
+    public void updateProduct(Category category,
+                         String name,
+                         String description,
+                         BigDecimal price,
+                         Integer stock){
         this.category = category;
         this.name = name;
         this.description = description;
