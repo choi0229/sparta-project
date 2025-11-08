@@ -37,6 +37,12 @@ public class Category {
     @JoinColumn(name = "parent_id")
     private Category parent;
 
+    @Column(nullable = false)
+    private String description;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Category> children = new ArrayList<>();
+
     @OneToMany(mappedBy = "category")
     private List<Product> products = new ArrayList<>();
 
@@ -51,9 +57,17 @@ public class Category {
     @Builder
     public Category(
             String name,
-            Category parent
+            Category parent,
+            String description
     ) {
         this.name = name;
         this.parent = parent;
+        this.description = description;
+    }
+
+    public void updateCategory(String name, Category parent, String description) {
+        this.name = name;
+        this.parent = parent;
+        this.description = description;
     }
 }
