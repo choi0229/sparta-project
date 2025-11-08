@@ -19,7 +19,8 @@ public enum ServiceExceptionCode {
     INVALID_PRODUCT_PRICE("상품 가격이 올바르지 않습니다"),
     NOT_FOUND_PURCHASE("구매 내역을 찾을 수 없습니다"),
     REFUND_NOT_ALLOWED("환불을 진행할 수 없는 상태입니다"),
-    DELETE_NOT_ALLOWED("삭제를 진행할 수 없는 상태입니다");;
+    CANCEL_NOT_ALLOWED("주문취소를 진행할 수 없는 상태입니다."),
+    DELETE_NOT_ALLOWED("삭제를 진행할 수 없는 상태입니다");
 
     final String message;
 }

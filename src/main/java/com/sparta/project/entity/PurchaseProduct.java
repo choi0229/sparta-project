@@ -2,6 +2,7 @@ package com.sparta.project.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -48,4 +49,11 @@ public class PurchaseProduct {
     @UpdateTimestamp
     LocalDateTime updatedAt;
 
+    @Builder
+    public PurchaseProduct(Purchase purchase, Product product, Integer quantity, BigDecimal price) {
+        this.purchase = purchase;
+        this.product = product;
+        this.quantity = quantity;
+        this.price = price;
+    }
 }

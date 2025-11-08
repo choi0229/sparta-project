@@ -3,6 +3,7 @@ package com.sparta.project.entity;
 import com.sparta.project.PurchaseStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -54,5 +55,15 @@ public class Purchase {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Builder
+    public Purchase(User user, PurchaseStatus status, BigDecimal totalPrice, String shippingAddress) {
+        this.user = user;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.shippingAddress = shippingAddress;
+    }
 
+    public void updateStatus(PurchaseStatus status){
+        this.status = status;
+    }
 }
