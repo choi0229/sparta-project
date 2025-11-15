@@ -48,12 +48,11 @@ public class UserServiceTest {
                 .password("1234")
                 .build();
         when(userRepository.existsByEmail(request.getEmail())).thenReturn(true);
-
         assertThatThrownBy(() -> userService.createUser(request))
                 .isInstanceOf(ServiceException.class)
                 .hasMessageContaining(ServiceExceptionCode.ALREADY_EXISTS_USER.getMessage());
+        verify(userRepository).existsByEmail("test@example.com");
+        verify(userRepository, org.mockito.Mockito.never()).save(any(User.class));
 
-        verify(userRepository).existsByEmail(request.getEmail());
-        verify(userRepository, never()).save(any(User.class));
     }
 }

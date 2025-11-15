@@ -20,7 +20,9 @@ public enum ServiceExceptionCode {
     INVALID_PRODUCT_PRICE("상품 가격이 올바르지 않습니다"),
     OUT_OF_STOCK_PRODUCT("재고가 없습니다."),
     NOT_FOUND_PURCHASE("구매 내역을 찾을 수 없습니다"),
-    REFUND_NOT_ALLOWED("환불을 진행할 수 없는 상태입니다");
+    REFUND_NOT_ALLOWED("환불을 진행할 수 없는 상태입니다"),
+    NOT_FOUND_PRODUCT_FROM_CART("장바구니에 해당 상품이 없습니다."),
+    CART_MAX_ITEMS_EXCEEDED("장바구니 최대 품목 수를 초과했습니다.");
 
     final String message;
 }

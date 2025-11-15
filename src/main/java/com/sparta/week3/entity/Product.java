@@ -1,5 +1,6 @@
 package com.sparta.week3.entity;
 
+import com.sparta.week3.CategoryGrade;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,8 +37,9 @@ public class Product {
     @Column(nullable = false)
     private Integer stock;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String category;
+    private CategoryGrade category;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
@@ -48,7 +50,7 @@ public class Product {
     private LocalDateTime updatedAt;
 
     @Builder
-    public Product(String name, BigDecimal price, Integer stock, String category) {
+    public Product(String name, BigDecimal price, Integer stock, CategoryGrade category) {
         this.name = name;
         this.price = price;
         this.stock = stock;
