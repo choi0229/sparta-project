@@ -13,7 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Table
+@Table(name = "users")
 @Entity
 @Getter
 @DynamicUpdate
@@ -45,6 +45,12 @@ public class User {
 
     @Builder
     public User(String name, String email, String passwordHash) {
+        this.name = name;
+        this.email = email;
+        this.passwordHash = passwordHash;
+    }
+
+    public void update(String name, String email, String passwordHash){
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;

@@ -50,4 +50,8 @@ public class PointWallet {
         this.balance = balance;
         this.active = active;
     }
+
+    public void activeUpdate(boolean active){
+        this.active = active;
+    }
 }
