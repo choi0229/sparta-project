@@ -54,4 +54,12 @@ public class PointWallet {
     public void activeUpdate(boolean active){
         this.active = active;
     }
+
+    public void increaseBalance(BigDecimal point){
+        this.balance = this.balance.add(point);
+    }
+
+    public void decreaseBalance(BigDecimal point){
+        this.balance = this.balance.subtract(point);
+    }
 }

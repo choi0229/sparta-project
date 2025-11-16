@@ -47,7 +47,7 @@ public class PointTransaction {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime expiresAt;
 
     @Builder
