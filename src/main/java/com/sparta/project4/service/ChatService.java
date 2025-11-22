@@ -1,5 +1,6 @@
 package com.sparta.project4.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.project4.controller.dto.ChatRequest;
 import com.sparta.project4.controller.dto.ChatResponse;
 import jakarta.annotation.PostConstruct;
@@ -8,11 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,9 +50,17 @@ public class ChatService {
         return response;
     }
 
-//    public ChatResponse chatStream(ChatRequest request) {
-//        return promptStream(request);
-//    }
+    public Flux<ServerSentEvent<String>> chatStream(ChatRequest request) {
+        List<Message> message = messageConverter.convertMessagesToSpringAI(request.messages());
+        ChatClient chatClient = null;
+        if(request.model().equals("qwen3")){
+            chatClient = chatClientMap.get("ollama");
+        }
+
+        Flux<String> tokenStream = promptStream(message, chatClient);
+
+        return messageConverter.convertMessagesToSprintAIWithStream(tokenStream, request.model());
+    }
 
     private org.springframework.ai.chat.model.ChatResponse prompt(List<Message> message, ChatRequest chatRequest, ChatClient chatClient) {
         return chatClient.prompt()
@@ -59,6 +69,12 @@ public class ChatService {
                 .chatResponse();
     }
 
+    private Flux<String> promptStream(List<Message> message, ChatClient chatClient) {
+        return chatClient.prompt()
+                .messages(message)
+                .stream()
+                .content();
+    }
 
 }
 

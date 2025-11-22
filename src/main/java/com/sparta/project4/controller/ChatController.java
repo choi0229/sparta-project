@@ -4,6 +4,8 @@ import com.sparta.project4.controller.dto.ChatRequest;
 import com.sparta.project4.controller.dto.ChatResponse;
 import com.sparta.project4.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,15 +19,15 @@ public class ChatController {
     private final ChatService chatService;
 
     @PostMapping("/completions")
-    public ChatResponse chat(@RequestBody ChatRequest request){
-        ChatResponse response;
+    public ResponseEntity<?> chat(@RequestBody ChatRequest request){
         if(request.stream()){
-            // response = chatService.chatStream(request);
-            response = null;
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_EVENT_STREAM)
+                    .body(chatService.chatStream(request));
         }else{
-            response = chatService.chatSync(request);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(chatService.chatSync(request));
         }
-
-        return response;
     }
 }

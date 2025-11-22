@@ -66,6 +66,8 @@ dependencies {
 
     // OLLAMA 연동
     implementation 'org.springframework.ai:spring-ai-starter-model-ollama'
+
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 tasks.named('test') {
