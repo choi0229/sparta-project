@@ -35,7 +35,7 @@ public class AnthropicChatConfig {
         return builder.build();
     }
 
-    @Bean(name = "claudeChatModel")
+    @Bean(name = "anthropicChatModel")
     public AnthropicChatModel anthropicChatModel(AnthropicApi anthropicApi) {
         log.info("=== AnthropicChatModel 생성");
         String modelName = "claude-sonnet-4-20250514";
@@ -51,7 +51,7 @@ public class AnthropicChatConfig {
     }
 
     @Bean(name = "anthropicChatClient")
-    public ChatClient anthropicChatClient(@Qualifier("claudeChatModel") AnthropicChatModel chatModel) {
+    public ChatClient anthropicChatClient(@Qualifier("anthropicChatModel") AnthropicChatModel chatModel) {
         return ChatClient.builder(chatModel)
                 .defaultSystem("""
                         당신은 친절하고 도움이 되는 AI 어시스턴트입니다.

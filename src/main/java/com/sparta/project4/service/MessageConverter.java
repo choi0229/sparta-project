@@ -22,7 +22,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MessageConverter{
 
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public List<Message> convertMessagesToSpringAI(List<ChatMessage> messages){
         return messages.stream()
@@ -46,13 +46,13 @@ public class MessageConverter{
                 System.currentTimeMillis() / 1000,
                 model,
                 List.of(new Choice(
-                        0, new ChatMessage("assisitant", content), "stop"
+                        0, new ChatMessage("assistant", content), "stop"
                 )),
                 usage
         );
     }
 
-    public Flux<ServerSentEvent<String>> convertMessagesToSprintAIWithStream(Flux<String> messages, String model){
+    public Flux<ServerSentEvent<String>> convertMessagesToSpringAIWithStream(Flux<String> messages, String model){
         String id = "chatcmpl-" + UUID.randomUUID();
         long created = System.currentTimeMillis() / 1000;
 
@@ -61,8 +61,8 @@ public class MessageConverter{
                 sseEvent(toChunkJson(id, created, model, "assistant", null, null))
         );
 
-        Flux<ServerSentEvent<String>> contentEvents = messages.map(token ->{
-            return sseEvent(toChunkJson(id, created, model, null, token, null));
+        Flux<ServerSentEvent<String>> contentEvents = messages.map(content ->{
+            return sseEvent(toChunkJson(id, created, model, null, content, null));
         });
 
         Flux<ServerSentEvent<String>> stopEvent = Flux.just(
