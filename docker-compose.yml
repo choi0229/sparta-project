@@ -6,6 +6,8 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
+    networks:
+      - chatbot-network
     restart: unless-stopped
 
   postgres:
@@ -20,7 +22,9 @@ services:
       - "5433:5432"
     volumes:
       - ${DB_HOME}/data/postgres:/var/lib/postgresql/data
-      - ${PROJECT_ROOT}/src/main/resources/db/migration/V1__init.sql:/docker-entrypoint-initdb.d/V2__init.sql
+      - ${PROJECT_ROOT}/src/main/resources/db/migration/V1__init.sql:/docker-entrypoint-initdb.d/V1__init.sql
+    networks:
+      - chatbot-network
     command: postgres -c shared_preload_libraries=vector
 
   open-webui:
@@ -30,7 +34,8 @@ services:
       - "3000:8080"
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
-      - OPENAI_API_BASE_URLS=http://host.docker.internal:8080/v1
+      - OPENAI_API_BASE_URLS=http://spring-api:8080/v1
+      - ENABLE_OPENAI_API=true
       - WEBUI_SECRET_KEY=my-super-secret-key-12345
     volumes:
       - open_webui_data:/app/backend/data
@@ -38,9 +43,33 @@ services:
       - "host.docker.internal:host-gateway"
     depends_on:
       - ollama
+      - postgres
+      - spring-api
+    networks:
+      - chatbot-network
+    restart: unless-stopped
+
+  spring-api:
+    build: .
+    container_name: spring-api
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/teamsparta_vector
+      - SPRING_DATASOURCE_USERNAME=rtan
+      - SPRING_DATASOURCE_PASSWORD=sparta
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    depends_on:
+      - postgres
+      - ollama
+    networks:
+      - chatbot-network
     restart: unless-stopped
 
 volumes:
   ollama_data:
   open_webui_data:
-  # postgres_data: # 필요시 주석 해제
+
+networks:
+  chatbot-network:
+    driver: bridge

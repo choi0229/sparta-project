@@ -55,10 +55,10 @@ dependencies {
     implementation 'org.springframework.ai:spring-ai-openai'
 
     // MCP Client (외부 MCP Server와 연결)
-    implementation 'org.springframework.ai:spring-ai-starter-mcp-client-webflux'
-
-    // 선택사항: MCP Server 직접 구현 (WebMVC)
-    implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
+//    implementation 'org.springframework.ai:spring-ai-starter-mcp-client-webflux'
+//
+//    // 선택사항: MCP Server 직접 구현 (WebMVC)
+//    implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
 }
 
 tasks.named('test') {

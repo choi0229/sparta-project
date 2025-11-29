@@ -2,15 +2,6 @@ spring:
   config:
     import: optional:file:.env[.properties]
   ai:
-    mcp:
-      client:
-        type: SYNC
-        toolcallback:
-          enabled: true
-        streamable-http:
-          connections:
-            weather-server:
-              url: http://localhost:8081
     anthropic:
       api-key: ${ANTHROPIC_API_KEY}
       chat:
@@ -35,7 +26,7 @@ spring:
         distance-type: cosine  # COSINE_DISTANCE ? cosine
         index-type: hnsw
   datasource:
-    url: jdbc:postgresql://localhost:5432/teamsparta_vector
+    url: jdbc:postgresql://localhost:5433/teamsparta_vector
     username: rtan
     password: sparta
     driver-class-name: org.postgresql.Driver
