@@ -54,6 +54,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.ai/spring-ai-openai
     implementation 'org.springframework.ai:spring-ai-openai'
 
+    implementation 'org.apache.pdfbox:pdfbox:3.0.1'
+    implementation 'org.apache.poi:poi-ooxml:5.2.5'
+
     // MCP Client (외부 MCP Server와 연결)
 //    implementation 'org.springframework.ai:spring-ai-starter-mcp-client-webflux'
 //

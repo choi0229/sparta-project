@@ -31,7 +31,7 @@ public class DocumentEntity implements Persistable<UUID> {
     private String contentType; // PDF, DOCS, TXT
 
     @CreationTimestamp
-    private LocalDateTime uploadAt;
+    private LocalDateTime uploadedAt;
 
     @Column(nullable = false)
     private Integer chunkCount;
@@ -61,8 +61,8 @@ public class DocumentEntity implements Persistable<UUID> {
 
     @PrePersist
     protected void onCreate(){
-        if(this.uploadAt == null) {
-            this.uploadAt = LocalDateTime.now();
+        if(this.uploadedAt == null) {
+            this.uploadedAt = LocalDateTime.now();
         }
     }
 

@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS documents
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     filename     VARCHAR(255) NOT NULL,
     content      TEXT         NOT NULL,
-    content_type VARCHAR(50)  NOT NULL,
+    content_type VARCHAR(200)  NOT NULL,
     uploaded_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     chunk_count  INTEGER      NOT NULL,
     metadata     TEXT,
