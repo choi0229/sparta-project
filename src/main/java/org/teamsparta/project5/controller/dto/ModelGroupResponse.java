@@ -5,5 +5,5 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record ModelListResponse(String object, List<ModelInfo> data) {
+public record ModelGroupResponse(String object, List<ModelInfo> data) {
 }

@@ -43,7 +43,7 @@ public class MessageConverter{
         return new ChatResponse(
                 "chatcmpl-"+ UUID.randomUUID().toString(),
                 "chat.completion",
-                System.currentTimeMillis() / 1000,
+                System.currentTimeMillis(),
                 model,
                 List.of(new Choice(
                         0, new ChatMessage("assistant", content), "stop"
@@ -54,7 +54,7 @@ public class MessageConverter{
 
     public Flux<ServerSentEvent<String>> convertMessagesToSpringAIWithStream(Flux<String> messages, String model){
         String id = "chatcmpl-" + UUID.randomUUID();
-        long created = System.currentTimeMillis() / 1000;
+        long created = System.currentTimeMillis();
 
 
         Flux<ServerSentEvent<String>> roleEvent = Flux.just(
