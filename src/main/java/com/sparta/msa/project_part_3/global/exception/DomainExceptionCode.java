@@ -25,6 +25,10 @@ public enum DomainExceptionCode {
   NOT_FOUND_USER(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
   ALREADY_USER_EMAIL(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
   INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다"),
+  INVALID_LOGIN(HttpStatus.UNAUTHORIZED, "로그인 정보가 없습니다."),
+
+  INSUFFICIENT_STOCK(HttpStatus.UNAUTHORIZED, "상품의 재고가 부족합니다"),
+  NOT_FOUND_CARTITEM(HttpStatus.NOT_FOUND, "장부구니를 찾을 수 없습니다."),
 
   ;
 
