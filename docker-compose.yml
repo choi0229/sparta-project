@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mysql_db:
+    image: mysql:8.0
+    container_name: msa_demo_mysql_only
+    environment:
+      MYSQL_DATABASE: sparta
+      MYSQL_ROOT_PASSWORD: root
+      TZ: UTC
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  redis-server:
+    image: redis
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    restart: always
+
+# 볼륨 정의
+volumes:
+  mysql_data:
