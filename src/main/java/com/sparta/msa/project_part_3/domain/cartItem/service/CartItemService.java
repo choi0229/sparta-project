@@ -11,6 +11,7 @@ import com.sparta.msa.project_part_3.domain.user.entity.User;
 import com.sparta.msa.project_part_3.domain.user.repository.UserRepository;
 import com.sparta.msa.project_part_3.global.exception.DomainException;
 import com.sparta.msa.project_part_3.global.exception.DomainExceptionCode;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,18 @@ public class CartItemService {
     private final CartItemQueryRepository cartItemQueryRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final RedisCartService redisCartService;
 
     @Transactional
-    public CartItemResponse addItem(CartItemRequest request, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new DomainException(DomainExceptionCode.NOT_FOUND_USER));
+    public CartItemResponse addItem(CartItemRequest request, String email, HttpSession session) {
+        User user;
+
+        if(email == null){
+            return redisCartService.addGuestCartItem(session.getId(), request);
+        }else{
+            user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new DomainException(DomainExceptionCode.NOT_FOUND_USER));
+        }
 
         Product product = productRepository.findById(request.productId())
                 .orElseThrow(() -> new DomainException(DomainExceptionCode.NOT_FOUND_PRODUCT));
@@ -41,7 +49,7 @@ public class CartItemService {
             throw new DomainException(DomainExceptionCode.INSUFFICIENT_STOCK);
         }
 
-        CartItem cartItem = cartItemRepository.findByUserIdAndProductId(userId, product.getId())
+        CartItem cartItem = cartItemRepository.findByUserEmailAndProductId(email, product.getId())
                 .orElse(null);
 
         if(cartItem != null){
@@ -73,8 +81,11 @@ public class CartItemService {
     }
 
     @Transactional(readOnly = true)
-    public List<CartItemResponse> getAllItems(Long userId) {
-        List<CartItem> cartItems = cartItemQueryRepository.findAllByUserIdWithProduct(userId);
+    public List<CartItemResponse> getAllItems(String email, HttpSession session) {
+        if(email == null){
+            return redisCartService.getCGuestCartItems(session.getId());
+        }
+        List<CartItem> cartItems = cartItemQueryRepository.findAllByUserEmailWithProduct(email);
 
         return cartItems.stream()
                 .map(CartItemResponse::from)
@@ -82,8 +93,8 @@ public class CartItemService {
     }
 
     @Transactional
-    public CartItemResponse updateQuantity(Long userId, CartItemRequest request) {
-        CartItem cartItem = cartItemRepository.findByUserIdAndProductId(userId, request.productId())
+    public CartItemResponse updateQuantity(String email, CartItemRequest request) {
+        CartItem cartItem = cartItemRepository.findByUserEmailAndProductId(email, request.productId())
                 .orElseThrow(() -> new DomainException(DomainExceptionCode.NOT_FOUND_CARTITEM));
 
         if(request.quantity() > cartItem.getProduct().getStock()){
@@ -100,10 +111,11 @@ public class CartItemService {
     }
 
     @Transactional
-    public void deleteCartItem(Long userId, Long productId) {
-        CartItem cartItem = cartItemRepository.findByUserIdAndProductId(userId, productId)
+    public void deleteCartItem(String email, Long productId) {
+        CartItem cartItem = cartItemRepository.findByUserEmailAndProductId(email, productId)
                 .orElseThrow(() -> new DomainException(DomainExceptionCode.NOT_FOUND_CARTITEM));
 
         cartItemRepository.delete(cartItem);
     }
+
 }

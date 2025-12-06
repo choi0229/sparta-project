@@ -17,12 +17,12 @@ public class CartItemQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<CartItem> findAllByUserIdWithProduct(Long userId){
+    public List<CartItem> findAllByUserEmailWithProduct(String email){
         return queryFactory
                 .selectFrom(cartItem)
                 .join(cartItem.product, product).fetchJoin()
                 .join(cartItem.user, user).fetchJoin()
-                .where(cartItem.user.id.eq(userId))
+                .where(cartItem.user.email.eq(email))
                 .fetch();
     }
 }

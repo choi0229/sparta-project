@@ -7,6 +7,7 @@ import com.sparta.msa.project_part_3.global.exception.DomainException;
 import com.sparta.msa.project_part_3.global.exception.DomainExceptionCode;
 import com.sparta.msa.project_part_3.global.response.ApiResponse;
 import com.sparta.msa.project_part_3.global.security.CustomUserDetails;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,27 +23,26 @@ public class CartItemController {
     private final CartItemService cartItemService;
 
     @PostMapping("/add")
-    public ApiResponse<CartItemResponse> addItem(@Valid @RequestBody CartItemRequest request, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ApiResponse<CartItemResponse> addItem(
+            @Valid @RequestBody CartItemRequest request
+            , @AuthenticationPrincipal CustomUserDetails userDetails
+            , HttpSession session
+    ) {
+        String email = userDetails != null ? userDetails.getUsername() : null;
 
-        if(userDetails == null){
-            throw new DomainException(DomainExceptionCode.INVALID_LOGIN);
-        }
-
-        Long userId = userDetails.getUserId();
-
-        CartItemResponse response = cartItemService.addItem(request, userId);
+        CartItemResponse response = cartItemService.addItem(request, email, session);
         return ApiResponse.ok(response);
     }
 
     @GetMapping
-    public ApiResponse<List<CartItemResponse>> getAllItems(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ApiResponse<List<CartItemResponse>> getAllItems(@AuthenticationPrincipal CustomUserDetails userDetails ,HttpSession session) {
         if(userDetails == null){
             throw new DomainException(DomainExceptionCode.INVALID_LOGIN);
         }
 
-        Long userId = userDetails.getUserId();
+        String email = userDetails.getUsername();
 
-        List<CartItemResponse> response = cartItemService.getAllItems(userId);
+        List<CartItemResponse> response = cartItemService.getAllItems(email, session);
         return ApiResponse.ok(response);
     }
 
@@ -53,8 +53,8 @@ public class CartItemController {
             throw new DomainException(DomainExceptionCode.INVALID_LOGIN);
         }
 
-        Long userId = userDetails.getUserId();
-        CartItemResponse response = cartItemService.updateQuantity(userId, request);
+        String email = userDetails.getUsername();
+        CartItemResponse response = cartItemService.updateQuantity(email, request);
         return ApiResponse.ok(response);
     }
 
@@ -64,8 +64,8 @@ public class CartItemController {
             throw new DomainException(DomainExceptionCode.INVALID_LOGIN);
         }
 
-        Long userId = userDetails.getUserId();
-        cartItemService.deleteCartItem(userId, productId);
+        String email = userDetails.getUsername();
+        cartItemService.deleteCartItem(email, productId);
         return ApiResponse.ok();
     }
 }
