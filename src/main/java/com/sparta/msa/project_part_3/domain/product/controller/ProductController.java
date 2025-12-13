@@ -1,6 +1,7 @@
 package com.sparta.msa.project_part_3.domain.product.controller;
 
 import com.sparta.msa.project_part_3.domain.product.dto.request.ProductRequest;
+import com.sparta.msa.project_part_3.domain.product.dto.response.ProductMaxDiscountResponse;
 import com.sparta.msa.project_part_3.domain.product.dto.response.ProductResponse;
 import com.sparta.msa.project_part_3.domain.product.service.ProductService;
 import com.sparta.msa.project_part_3.global.response.ApiResponse;
@@ -50,6 +51,12 @@ public class ProductController {
   public ApiResponse<Void> delete(@PathVariable Long productId) {
     productService.delete(productId);
     return ApiResponse.ok();
+  }
+
+  @GetMapping("/{productId}/max-discount")
+  public ApiResponse<ProductMaxDiscountResponse> findProductWithMaxDiscount(@PathVariable Long productId) {
+    ProductMaxDiscountResponse response = productService.findProductWithMaxDiscount(productId);
+    return ApiResponse.ok(response);
   }
 
 }

@@ -28,7 +28,9 @@ public enum DomainExceptionCode {
   INVALID_LOGIN(HttpStatus.UNAUTHORIZED, "로그인 정보가 없습니다."),
 
   INSUFFICIENT_STOCK(HttpStatus.UNAUTHORIZED, "상품의 재고가 부족합니다"),
-  NOT_FOUND_CARTITEM(HttpStatus.NOT_FOUND, "장부구니를 찾을 수 없습니다."),
+  NOT_FOUND_CARTITEM(HttpStatus.NOT_FOUND, "장바구니를 찾을 수 없습니다."),
+    NOT_FOUND_COUPON(HttpStatus.NOT_FOUND, "쿠폰을 찾을 수 없습니다."),
+    INVALID_DATE(HttpStatus.UNAUTHORIZED, "날짜가 잘못됐습니다.")
 
   ;
 

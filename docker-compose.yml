@@ -3,7 +3,7 @@ version: '3.8'
 services:
   mysql_db:
     image: mysql:8.0
-    container_name: msa_demo_mysql_only
+    container_name: msa_week7_mysql_project
     environment:
       MYSQL_DATABASE: sparta
       MYSQL_ROOT_PASSWORD: root
@@ -15,7 +15,7 @@ services:
 
   redis-server:
     image: redis
-    container_name: redis-server
+    container_name: redis-server-week7
     ports:
       - "6379:6379"
     restart: always
