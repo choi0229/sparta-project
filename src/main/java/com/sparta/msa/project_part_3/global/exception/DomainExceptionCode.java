@@ -30,7 +30,13 @@ public enum DomainExceptionCode {
   INSUFFICIENT_STOCK(HttpStatus.UNAUTHORIZED, "상품의 재고가 부족합니다"),
   NOT_FOUND_CARTITEM(HttpStatus.NOT_FOUND, "장바구니를 찾을 수 없습니다."),
     NOT_FOUND_COUPON(HttpStatus.NOT_FOUND, "쿠폰을 찾을 수 없습니다."),
-    INVALID_DATE(HttpStatus.UNAUTHORIZED, "날짜가 잘못됐습니다.")
+    INVALID_DATE(HttpStatus.UNAUTHORIZED, "날짜가 잘못됐습니다."),
+    FAILED_CREATE_COUPON_CODE(HttpStatus.EXPECTATION_FAILED, "쿠폰 코드 생성에 실패했습니다."),
+    NOT_FOUND_COUPON_CODE(HttpStatus.NOT_FOUND, "쿠폰 코드를 찾을 수 없습니다."),
+    DELETED_COUPON(HttpStatus.UNAUTHORIZED, "삭제된 쿠폰입니다."),
+    EXHAUSTED_COUPON(HttpStatus.UNAUTHORIZED, "다 쓴 쿠폰입니다."),
+    ISSUED_COUPON(HttpStatus.BAD_REQUEST, "이미 발급된 쿠폰입니다."),
+
 
   ;
 

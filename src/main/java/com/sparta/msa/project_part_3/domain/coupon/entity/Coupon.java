@@ -4,8 +4,10 @@ import com.sparta.msa.project_part_3.global.enums.DiscountType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -60,9 +62,11 @@ public class Coupon {
     Boolean isDeleted;
 
     @Column(nullable = false, updatable = false)
+    @CreationTimestamp
     LocalDateTime createDate;
 
     @Column(nullable = false)
+    @UpdateTimestamp
     LocalDateTime updateDate;
 
     @Builder
@@ -112,5 +116,9 @@ public class Coupon {
         BigDecimal discountAmount = calculateDiscountAmount(productPrice);
 
         return discountAmount.multiply(BigDecimal.valueOf(100)).divide(productPrice, 2, BigDecimal.ROUND_HALF_UP);
+    }
+
+    public void increaseIssueCount(){
+        this.issueCount += 1;
     }
 }
