@@ -121,4 +121,6 @@ public class Coupon {
     public void increaseIssueCount(){
         this.issueCount += 1;
     }
+
+    public void increaseUsedCount(){ this.usedCount += 1; }
 }

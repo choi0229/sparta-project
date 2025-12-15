@@ -36,6 +36,7 @@ public enum DomainExceptionCode {
     DELETED_COUPON(HttpStatus.UNAUTHORIZED, "삭제된 쿠폰입니다."),
     EXHAUSTED_COUPON(HttpStatus.UNAUTHORIZED, "다 쓴 쿠폰입니다."),
     ISSUED_COUPON(HttpStatus.BAD_REQUEST, "이미 발급된 쿠폰입니다."),
+    CANNOT_USE_COUPON(HttpStatus.BAD_REQUEST,"사용할 수 없는 쿠폰입니다");
 
 
   ;

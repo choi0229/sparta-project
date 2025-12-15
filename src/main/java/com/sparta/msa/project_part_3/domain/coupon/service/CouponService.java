@@ -4,6 +4,7 @@ import com.sparta.msa.project_part_3.domain.auth.service.AuthService;
 import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponCodeRequest;
 import com.sparta.msa.project_part_3.domain.coupon.dto.request.CouponRequest;
 import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponResponse;
+import com.sparta.msa.project_part_3.domain.coupon.dto.response.CouponUserResponse;
 import com.sparta.msa.project_part_3.domain.coupon.entity.Coupon;
 import com.sparta.msa.project_part_3.domain.coupon.entity.CouponUser;
 import com.sparta.msa.project_part_3.domain.coupon.repository.CouponQueryRepository;
@@ -129,12 +130,12 @@ public class CouponService {
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new DomainException(DomainExceptionCode.NOT_FOUND_USER));
 
-        Coupon coupon = couponRepository.findByIdWithLock(couponUser.getCoupon().getId())
-                        .orElseThrow(()-> new DomainException(DomainExceptionCode.NOT_FOUND_COUPON));
-
         validateCouponUser(couponUser);
+        if(!couponUser.getStatus().equals(CouponUserStatus.PENDING)){
+            throw new DomainException(DomainExceptionCode.ISSUED_COUPON);
+        }
 
-        coupon.increaseIssueCount();
+        couponUser.getCoupon().increaseIssueCount();
         couponUser.updateStatus(CouponUserStatus.ISSUED, user);
     }
 
@@ -152,9 +153,35 @@ public class CouponService {
         if(couponUser.getCoupon().getIssueCount() >= couponUser.getCoupon().getUsageLimit()){
             throw new DomainException(DomainExceptionCode.EXHAUSTED_COUPON);
         }
+    }
 
-        if(!couponUser.getStatus().equals(CouponUserStatus.PENDING)){
+    public List<CouponUserResponse> getUserCoupons(Long userId){
+        List<CouponUser> coupons = couponUserRepository.findByUserId(userId);
+
+        return coupons.stream()
+                .map(CouponUserResponse::from)
+                .toList();
+    }
+
+    public List<CouponUserResponse> getUserCouponsStatus(Long userId, CouponUserStatus status){
+        List<CouponUser> coupons = couponUserRepository.findByUserIdAndStatus(userId, status);
+
+        return coupons.stream()
+                .map(CouponUserResponse::from)
+                .toList();
+    }
+
+    @Transactional
+    public void useCoupon(Long userId, String couponCode){
+        CouponUser couponUser = couponUserRepository.findByUserIdAndCouponCode(userId, couponCode)
+                .orElseThrow(()-> new DomainException(DomainExceptionCode.NOT_FOUND_COUPON));
+
+        validateCouponUser(couponUser);
+        if(!couponUser.getStatus().equals(CouponUserStatus.ISSUED)){
             throw new DomainException(DomainExceptionCode.ISSUED_COUPON);
         }
+
+        couponUser.getCoupon().increaseUsedCount();
+        couponUser.updateStatus(CouponUserStatus.USED, couponUser.getUser());
     }
 }
